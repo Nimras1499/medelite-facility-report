@@ -22,10 +22,14 @@ const CONFIG = {
 
   // Browsers block direct calls to data.cms.gov (no CORS headers), so
   // requests are routed through a public CORS proxy that simply
-  // forwards the request and adds the missing headers. Set to "" to
-  // call CMS directly (e.g. if running from a backend with no CORS
-  // restrictions).
-  CORS_PROXY: "https://api.allorigins.win/raw?url=",
+  // forwards the request and adds the missing headers. The app tries
+  // each of these in order (an empty string "" means "call CMS
+  // directly, no proxy") and uses the first one that works.
+  CORS_PROXIES: [
+    "https://api.allorigins.win/raw?url=",
+    "https://corsproxy.io/?url=",
+    "",
+  ],
 
   DATASETS: {
     // NH_ProviderInfo_MonYYYY.csv — facility metadata, bed count, star ratings

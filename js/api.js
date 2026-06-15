@@ -41,30 +41,35 @@ function buildQueryUrl(datasetId, conditions = []) {
 
 async function pdcQuery(datasetId, conditions) {
   const url = buildQueryUrl(datasetId, conditions);
-  const fetchUrl = CONFIG.CORS_PROXY ? CONFIG.CORS_PROXY + encodeURIComponent(url) : url;
-  let response;
-  try {
-    response = await fetch(fetchUrl, { headers: { Accept: "application/json" } });
-  } catch (err) {
-    throw new CmsApiError(
-      "Could not reach the CMS Provider Data Catalog. Check your network connection.",
-      { cause: err }
-    );
+  const attempts = CONFIG.CORS_PROXIES.length ? CONFIG.CORS_PROXIES : [""];
+
+  let lastError;
+  for (const proxy of attempts) {
+    const fetchUrl = proxy ? proxy + encodeURIComponent(url) : url;
+    try {
+      const response = await fetch(fetchUrl, { headers: { Accept: "application/json" } });
+      if (!response.ok) {
+        lastError = new CmsApiError(
+          `CMS API returned an error (HTTP ${response.status}) for dataset ${datasetId}.`
+        );
+        continue;
+      }
+      const json = await response.json();
+      if (!Array.isArray(json.results)) {
+        lastError = new CmsApiError("CMS API returned an unexpected response shape.");
+        continue;
+      }
+      return json.results;
+    } catch (err) {
+      lastError = err;
+      continue; // try the next proxy
+    }
   }
-  if (!response.ok) {
-    throw new CmsApiError(
-      `CMS API returned an error (HTTP ${response.status}) for dataset ${datasetId}.`
-    );
-  }
-  let json;
-  try {
-    json = await response.json();
-  } catch (err) {
-    throw new CmsApiError("CMS API returned a response that wasn't valid JSON.", {
-      cause: err,
-    });
-  }
-  return Array.isArray(json.results) ? json.results : [];
+
+  throw new CmsApiError(
+    "Could not reach the CMS Provider Data Catalog through any available connection. Check your network connection.",
+    { cause: lastError }
+  );
 }
 
 /**
