@@ -20,6 +20,13 @@
 const CONFIG = {
   CMS_API_BASE: "https://data.cms.gov/provider-data/api/1/datastore/query",
 
+  // Browsers block direct calls to data.cms.gov (no CORS headers), so
+  // requests are routed through a public CORS proxy that simply
+  // forwards the request and adds the missing headers. Set to "" to
+  // call CMS directly (e.g. if running from a backend with no CORS
+  // restrictions).
+  CORS_PROXY: "https://api.allorigins.win/raw?url=",
+
   DATASETS: {
     // NH_ProviderInfo_MonYYYY.csv — facility metadata, bed count, star ratings
     PROVIDER_INFO: "4pq5-n9py",
