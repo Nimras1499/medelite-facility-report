@@ -1,0 +1,498 @@
+/* ==========================================================================
+   INFINITE — Managed by MEDELITE
+   Facility Assessment Report Generator
+   ========================================================================== */
+
+:root {
+  --magenta: #d6249f;
+  --blue: #2ba9e0;
+  --navy: #1b2a4a;
+  --bg: #f5f6fa;
+  --card-bg: #ffffff;
+  --border: #e2e6ee;
+  --text: #1b2a4a;
+  --text-muted: #6c7a93;
+  --good: #2ead6b;
+  --warn: #e0473c;
+
+  --font-display: "Manrope", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(27, 42, 74, 0.06), 0 1px 2px rgba(27, 42, 74, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* ----------------------------- Header ---------------------------------- */
+
+.brand-header {
+  background: var(--navy);
+  color: #fff;
+  padding: 28px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand-mark {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: 0.06em;
+  background: linear-gradient(90deg, var(--magenta), var(--blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.brand-sub {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--blue);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.report-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.report-title h1 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.state-chip {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+/* ----------------------------- Layout ----------------------------------- */
+
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 720px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+}
+
+.card h2 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 12px;
+  color: var(--navy);
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+
+.hint {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin: 6px 0 0;
+  font-style: italic;
+  min-height: 1.2em;
+}
+
+/* ----------------------------- Lookup card ------------------------------ */
+
+.lookup-card h2 {
+  margin-bottom: 6px;
+}
+
+.lookup-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.lookup-row label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.lookup-row:has(label) {
+  flex-direction: column;
+}
+
+.link-like {
+  background: none;
+  border: none;
+  color: var(--blue);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+input,
+select {
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  width: 100%;
+}
+
+input.mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+
+#ccnInput {
+  max-width: 220px;
+}
+
+/* ----------------------------- Buttons ----------------------------------- */
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 8px;
+  border: none;
+  padding: 11px 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.15s ease, transform 0.05s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, var(--magenta), var(--blue));
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.92;
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--navy);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ----------------------------- Status box -------------------------------- */
+
+.status-box {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.status-error {
+  background: #fdecea;
+  border-color: #f6cdc8;
+  color: #9c2b22;
+}
+
+.status-warning {
+  background: #fff7e6;
+  border-color: #ffe0a3;
+  color: #8a5a00;
+}
+
+.status-info {
+  background: #eaf6ff;
+  border-color: #c7e8fb;
+  color: #0d5e85;
+}
+
+/* ----------------------------- Definition list ---------------------------- */
+
+.def-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 16px;
+  margin: 0;
+}
+
+.def-list dt {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.def-list dd {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* ----------------------------- Ratings ------------------------------------ */
+
+.ratings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rating-card {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.rating-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rating-bar {
+  display: flex;
+  gap: 4px;
+}
+
+.rating-seg {
+  width: 18px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--border);
+}
+
+.rating-seg.filled {
+  background: linear-gradient(90deg, var(--magenta), var(--blue));
+}
+
+.rating-number {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 48px;
+  text-align: right;
+}
+
+/* ----------------------------- Form grid ----------------------------------- */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* ----------------------------- Hospitalization table ------------------------ */
+
+.hosp-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 760px) {
+  .hosp-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hosp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.hosp-table th,
+.hosp-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 7px 8px;
+  text-align: left;
+}
+
+.hosp-table th {
+  font-family: var(--font-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.hosp-table td.num,
+.hosp-table th:last-child {
+  text-align: right;
+  font-family: var(--font-mono);
+}
+
+.hosp-charts {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.chart-box h4 {
+  font-family: var(--font-display);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin: 0 0 6px;
+}
+
+.chart-box canvas {
+  max-height: 180px;
+}
+
+.chart-fallback {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ----------------------------- Export card ---------------------------------- */
+
+.export-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.export-card a {
+  color: var(--blue);
+  word-break: break-all;
+}
+
+/* ----------------------------- Footer ---------------------------------------- */
+
+.site-footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 24px 20px 40px;
+}
+
+.site-footer a {
+  color: var(--blue);
+}
