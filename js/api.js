@@ -41,9 +41,10 @@ function buildQueryUrl(datasetId, conditions = []) {
 
 async function pdcQuery(datasetId, conditions) {
   const url = buildQueryUrl(datasetId, conditions);
+  const fetchUrl = CONFIG.CORS_PROXY ? CONFIG.CORS_PROXY + encodeURIComponent(url) : url;
   let response;
   try {
-    response = await fetch(url, { headers: { Accept: "application/json" } });
+    response = await fetch(fetchUrl, { headers: { Accept: "application/json" } });
   } catch (err) {
     throw new CmsApiError(
       "Could not reach the CMS Provider Data Catalog. Check your network connection.",
