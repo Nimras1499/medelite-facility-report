@@ -23,6 +23,13 @@
   --shadow: 0 1px 3px rgba(27, 42, 74, 0.06), 0 1px 2px rgba(27, 42, 74, 0.08);
 }
 
+/* Ensure the HTML `hidden` attribute always wins over any CSS display rule.
+   Without this, `.spinner { display: inline-block }` overrides hidden=true
+   and the spinner never disappears even after the lookup completes. */
+[hidden] {
+  display: none !important;
+}
+
 * {
   box-sizing: border-box;
 }
