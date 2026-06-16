@@ -84,15 +84,16 @@ function generatePdfReport(report) {
   doc.setTextColor(...BRAND_COLORS.navy);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
-  doc.text(CONFIG.BRAND.REPORT_TITLE, margin, y);
+  doc.text(CONFIG.BRAND.REPORT_TITLE, pageWidth / 2, y, { align: "center" });
 
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  doc.text(report.state ? `State: ${report.state}` : "State: —", pageWidth - margin, y, {
-    align: "right",
-  });
+  if (report.state) {
+    y += 18;
+    doc.setFontSize(13);
+    doc.setFont("helvetica", "normal");
+    doc.text(report.state, pageWidth / 2, y, { align: "center" });
+  }
 
-  y += 20;
+  y += 18;
 
   // --- Main facility/operational fields -------------------------------
   doc.autoTable({

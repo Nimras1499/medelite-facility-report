@@ -154,7 +154,7 @@ function buildHospitalizationRows(claimsMeasures, averages) {
       group: "STR Hospitalization",
     },
     {
-      label: "STR State Avg. for Hospitalization",
+      label: "STR State National Avg. for Hospitalization",
       value: stateAvg.shortStayHosp,
       fmt: fmtPercent,
       group: "STR Hospitalization",
@@ -190,13 +190,13 @@ function buildHospitalizationRows(claimsMeasures, averages) {
       group: "LT Hospitalization",
     },
     {
-      label: "LT State Avg. for Hospitalization",
+      label: "LT State National Avg. for Hospitalization",
       value: stateAvg.longStayHosp,
       fmt: fmtRate,
       group: "LT Hospitalization",
     },
     {
-      label: "ED Visit (LT)",
+      label: "ED Visit",
       value: get(M.LONG_STAY_ED_VISIT, "observed"),
       fmt: fmtRate,
       group: "LT ED Visit",
@@ -317,8 +317,8 @@ function renderAll() {
   renderHospitalizationTable(state.hospitalization || []);
   renderHospChart(els.hospChartCanvas, state.hospitalization || []);
 
-  // Medicare Care Compare link (dynamic CCN — required hyperlink)
-  const url = CONFIG.careCompareUrl(state.ccn);
+  // Medicare Care Compare link (dynamic CCN + state — required hyperlink)
+  const url = CONFIG.careCompareUrl(state.ccn, state.facilityState);
   els.careCompareLink.href = url;
   els.careCompareLink.textContent = url;
 
@@ -333,7 +333,16 @@ function bindManualInputs() {
   els.nameOverrideInput.addEventListener("input", () => {
     state.nameOverride = els.nameOverrideInput.value;
     if (state.lookedUp) {
+      // Live-update the displayed name in the results panel
       els.resolvedName.textContent = resolvedFacilityName();
+      // Show a clear hint so the user knows the override is active
+      if (state.nameOverride.trim()) {
+        els.apiNameHint.textContent = `✓ Override active — CMS legal name: ${state.apiName}`;
+      } else {
+        els.apiNameHint.textContent = state.apiName
+          ? `CMS legal name on file: ${state.apiName}`
+          : "";
+      }
     }
   });
 }
@@ -356,7 +365,7 @@ function buildReportData() {
     ratings: state.ratings,
     hospitalization: state.hospitalization || [],
     ccn: state.ccn,
-    careCompareUrl: CONFIG.careCompareUrl(state.ccn),
+    careCompareUrl: CONFIG.careCompareUrl(state.ccn, state.facilityState),
   };
 }
 

@@ -51,8 +51,15 @@ const CONFIG = {
   },
 
   // Used to build the "Medicare Source Hyperlink" required by the spec.
-  careCompareUrl(ccn) {
-    return `https://www.medicare.gov/care-compare/details/nursing-home/${ccn}`;
+  // The spec's Section 2 example is the bare profile URL
+  // (.../nursing-home/{CCN}), but Section 5's "Sample Expected Output"
+  // for the CCN 686123 test case is the fuller
+  // .../nursing-home/{CCN}/view-all?state={STATE} form — so we build
+  // that fuller form whenever we know the facility's state, and fall
+  // back to the bare URL otherwise.
+  careCompareUrl(ccn, state) {
+    const base = `https://www.medicare.gov/care-compare/details/nursing-home/${ccn}`;
+    return state ? `${base}/view-all?state=${state}` : base;
   },
 
   // Branding text — per the case study's "Critical Branding Guardrail",
